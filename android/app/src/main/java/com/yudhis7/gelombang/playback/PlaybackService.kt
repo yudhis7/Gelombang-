@@ -415,7 +415,7 @@ class PlaybackService : MediaLibraryService() {
             startPositionMs: Long,
         ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> = scope.future {
             // A single station picked in the car: queue its whole list so next/previous work.
-            if (mediaItems.size == 1 && controller.packageName != packageName) {
+            if (mediaItems.size == 1 && controller.controllerVersion == MediaSession.ControllerInfo.LEGACY_CONTROLLER_VERSION) {
                 val resolved = resolveItem(mediaItems[0])
                 if (resolved != null) {
                     val uuid = MediaIds.stationUuid(resolved.mediaId)

@@ -94,6 +94,7 @@ class AutoBrowseTest {
         val b = connect(null)
         assertNotNull("MediaBrowser could not connect", b)
         browser = b!!
+        @Suppress("DEPRECATION")
         log("root='${b.root}' extras=${b.extras?.keySet()?.joinToString { k -> "$k=${b.extras?.get(k)}" }}")
 
         val tabs = children(b, b.root)
@@ -123,9 +124,12 @@ class AutoBrowseTest {
         assertTrue("station did not start playing", playing)
 
         // Next station in the same list (the car's skip button).
+        val before = controller.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
         main.post { controller.transportControls.skipToNext() }
         Thread.sleep(8000)
-        log("after skipToNext: state=${controller.playbackState?.state} title='${controller.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)}'")
+        val after = controller.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
+        log("after skipToNext: state=${controller.playbackState?.state} '$before' -> '$after'")
+        assertTrue("skip did not change station", before != after)
 
         // Favourite button on the car's Now Playing screen.
         val fav = controller.playbackState?.customActions?.firstOrNull()
@@ -137,9 +141,12 @@ class AutoBrowseTest {
         }
 
         // Voice: "play jazz on Gelombang".
+        main.post { controller.transportControls.stop() }
+        waitForState(controller, PlaybackState.STATE_STOPPED, 10)
         main.post { controller.transportControls.playFromSearch("jazz", Bundle()) }
         val searched = waitForState(controller, PlaybackState.STATE_PLAYING, 30)
-        log("playFromSearch(jazz) playing=$searched title='${controller.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)}'")
+        log("playFromSearch(jazz) playing=$searched state=${controller.playbackState?.state} title='${controller.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)}' genre=${controller.metadata?.getString(MediaMetadata.METADATA_KEY_GENRE)}")
+        assertTrue("voice search did not start playback", searched)
 
         main.post { controller.transportControls.pause() }
         Thread.sleep(1000)

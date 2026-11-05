@@ -87,7 +87,7 @@ private fun CountryDirectory(vm: AppViewModel, selected: String?, onCountry: (St
                     Text(g.name, style = MaterialTheme.typography.titleSmall, color = Palette.Text2, modifier = Modifier.weight(1f))
                     if (total != null) Text(nf.format(total), style = MaterialTheme.typography.bodySmall, color = Palette.Muted)
                     Spacer(Modifier.width(4.dp))
-                    Ic(R.drawable.ic_next, null, tint = Palette.Muted, modifier = Modifier.alpha(0.6f))
+                    Ic(R.drawable.ic_chevron, null, tint = Palette.Muted)
                 }
             }
             items(g.countries, key = { it.code }) { c ->

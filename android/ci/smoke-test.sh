@@ -82,6 +82,7 @@ tap "Search"; sleep 2
 adb shell input text "jazz"; sleep 8; texts; shot phone-search
 
 echo "== library"
+adb shell input keyevent KEYCODE_BACK; sleep 1
 tap "Library"; sleep 3; texts; shot phone-library
 
 echo "== tablet layout"
