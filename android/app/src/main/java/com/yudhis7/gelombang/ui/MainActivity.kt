@@ -218,11 +218,13 @@ private fun MiniPlayer(vm: AppViewModel) {
                     Box(Modifier.size(6.dp).clip(CircleShape).background(Palette.Accent))
                     Spacer(Modifier.width(6.dp))
                 }
+                val error = ui.error
+                val song = ui.song
                 Text(
                     when {
-                        ui.error != null -> ui.error
+                        error != null -> error
                         ui.busy -> "Connecting…"
-                        ui.song != null -> ui.song
+                        song != null -> song
                         ui.isPlaying -> station.placeLine()
                         else -> "Paused"
                     },

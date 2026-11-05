@@ -85,6 +85,7 @@ fun HomeScreen(vm: AppViewModel) {
 
     BoxWithConstraints {
         val cardWidth = if (maxWidth > 700.dp) 168.dp else 140.dp
+        val regionColumns = if (maxWidth > 900.dp) 3 else if (maxWidth > 560.dp) 2 else 1
         LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp)) {
             item {
                 Column(
@@ -160,7 +161,7 @@ fun HomeScreen(vm: AppViewModel) {
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
-                    maxItemsInEachRow = if (maxWidth > 900.dp) 3 else if (maxWidth > 560.dp) 2 else 1,
+                    maxItemsInEachRow = regionColumns,
                 ) {
                     AppGraph.regions.groups.forEach { g ->
                         val n = counts?.let { c -> g.countries.sumOf { c[it.code] ?: 0 } }

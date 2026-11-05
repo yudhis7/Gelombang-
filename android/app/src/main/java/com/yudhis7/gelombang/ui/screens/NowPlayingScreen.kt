@@ -92,14 +92,16 @@ fun NowPlayingScreen(vm: AppViewModel) {
                 IconButton(onClick = { vm.stop() }) { Ic(R.drawable.ic_stop, "Stop", tint = Palette.Text2) }
             }
             BoxWithConstraints(Modifier.fillMaxSize()) {
-                val landscape = maxWidth > maxHeight && maxWidth >= 560.dp
+                val w = maxWidth
+                val h = maxHeight
+                val landscape = w > h && w >= 560.dp
                 if (landscape) {
                     Row(
                         Modifier.fillMaxSize().padding(24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(32.dp),
                     ) {
-                        StationArt(station, minOf(maxHeight - 48.dp, maxWidth * 0.42f), corner = 22.dp)
+                        StationArt(station, minOf(h - 48.dp, w * 0.42f), corner = 22.dp)
                         Column(Modifier.weight(1f)) { Details(vm, ui, fav) }
                     }
                 } else {
@@ -108,7 +110,7 @@ fun NowPlayingScreen(vm: AppViewModel) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
                     ) {
-                        StationArt(station, minOf(maxWidth - 48.dp, maxHeight * 0.45f, 420.dp), corner = 22.dp)
+                        StationArt(station, minOf(w - 48.dp, h * 0.45f, 420.dp), corner = 22.dp)
                         Spacer(Modifier.height(28.dp))
                         Column(Modifier.widthIn(max = 520.dp)) { Details(vm, ui, fav) }
                     }

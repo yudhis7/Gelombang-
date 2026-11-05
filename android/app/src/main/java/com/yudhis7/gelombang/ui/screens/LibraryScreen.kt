@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +38,7 @@ import com.yudhis7.gelombang.ui.StationRow
 import com.yudhis7.gelombang.ui.stationMenu
 import com.yudhis7.gelombang.ui.theme.Palette
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryScreen(vm: AppViewModel) {
     val favorites by vm.favorites.collectAsStateWithLifecycle()

@@ -47,31 +47,41 @@ class ArtworkProvider : ContentProvider() {
         return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
     }
 
-    private fun download(url: String, out: File): Boolean = try {
+    private fun download(url: String, out: File): Boolean {
+        return try {
+            downloadUnsafe(url, out)
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    /** Opens the URL, following up to 4 redirects (including http <-> https). */
+    private fun open(url: String): HttpURLConnection? {
         var current = URL(url)
-        var conn: HttpURLConnection
-        var hops = 0
-        while (true) {
-            conn = current.openConnection() as HttpURLConnection
+        repeat(5) {
+            val conn = current.openConnection() as HttpURLConnection
             conn.instanceFollowRedirects = false
             conn.connectTimeout = 6000
             conn.readTimeout = 8000
             conn.setRequestProperty("User-Agent", RadioBrowser.USER_AGENT)
             val code = conn.responseCode
-            if (code in 300..399 && hops < 4) {
+            if (code in 300..399) {
                 val loc = conn.getHeaderField("Location")
                 conn.disconnect()
-                if (loc.isNullOrBlank()) return false
+                if (loc.isNullOrBlank()) return null
                 current = URL(current, loc)
-                hops++
-                continue
-            }
-            if (code !in 200..299) {
+            } else if (code in 200..299) {
+                return conn
+            } else {
                 conn.disconnect()
-                return false
+                return null
             }
-            break
         }
+        return null
+    }
+
+    private fun downloadUnsafe(url: String, out: File): Boolean {
+        val conn = open(url) ?: return false
         val bytes = conn.inputStream.use { input ->
             val buf = java.io.ByteArrayOutputStream()
             val chunk = ByteArray(16 * 1024)
@@ -88,7 +98,7 @@ class ArtworkProvider : ContentProvider() {
         conn.disconnect()
         val src = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         if (src == null || src.width < 8 || src.height < 8) {
-            false
+            return false
         } else {
             // Logos are often transparent; put them on white, centred in a square.
             val size = 320
@@ -104,10 +114,8 @@ class ArtworkProvider : ContentProvider() {
                 Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG),
             )
             FileOutputStream(out).use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
-            true
+            return true
         }
-    } catch (e: Exception) {
-        false
     }
 
     private fun writeTile(name: String, label: String?, out: File) {
