@@ -41,6 +41,10 @@ Prefer no installer? Unzip **`Gelombang-Radio-1.0.0-win-x64.zip`** anywhere and 
    xattr -cr "/Applications/Gelombang Radio.app"
    ```
 
+### Android phones, tablets and Android Auto
+
+There's also a native Android version. See [android/README.md](android/README.md) for installing it and for turning it on in Android Auto.
+
 ## Using it
 
 | Action | Windows | macOS |

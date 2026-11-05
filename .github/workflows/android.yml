@@ -1,0 +1,85 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "android/**"
+      - ".github/workflows/android.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Prepare signing key
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            echo "GELOMBANG_KEYSTORE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+            echo "Release key found."
+          else
+            echo "::warning::No ANDROID_KEYSTORE_BASE64 secret, so the APK is signed with a temporary debug key."
+          fi
+
+      - name: Build release APK
+        working-directory: android
+        env:
+          GELOMBANG_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          GELOMBANG_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          GELOMBANG_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          set -o pipefail
+          ./gradlew --no-daemon --stacktrace assembleRelease 2>&1 | tee "$RUNNER_TEMP/build.log"
+
+      - name: Report build errors
+        if: failure()
+        run: |
+          python3 - <<'PY'
+          import os, re
+          path = os.path.join(os.environ["RUNNER_TEMP"], "build.log")
+          lines = open(path, errors="replace").read().splitlines() if os.path.exists(path) else []
+          keep, i = [], 0
+          while i < len(lines):
+              l = lines[i]
+              if "What went wrong" in l:
+                  keep += lines[i:i + 15]; i += 15; continue
+              if re.match(r"^(e: |ERROR:|AAPT: error)", l) or "error:" in l.lower() or "Could not resolve" in l or "Could not find" in l:
+                  keep.append(l)
+              i += 1
+          text = "\n".join(dict.fromkeys(keep)) or "\n".join(lines[-60:])
+          chunks = [text[j:j + 3000] for j in range(0, len(text), 3000)][:10]
+          for n, c in enumerate(chunks, 1):
+              msg = c.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+              print(f"::error title=Build errors {n}/{len(chunks)}::{msg}")
+          PY
+
+      - name: Name the APK
+        run: |
+          VERSION=$(grep -oP 'versionName = "\K[^"]+' android/app/build.gradle.kts)
+          mkdir -p out
+          cp android/app/build/outputs/apk/release/app-release.apk "out/Gelombang-Radio-$VERSION-android.apk"
+          (cd out && sha256sum *.apk > SHA256SUMS-android.txt)
+          ls -la out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gelombang-android-apk
+          path: out/*
+          if-no-files-found: error

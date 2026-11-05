@@ -1,0 +1,71 @@
+{
+  "groups": [
+    {
+      "id": "anz",
+      "name": "Australia & New Zealand",
+      "countries": [
+        { "code": "AU", "name": "Australia", "tz": "Australia/Sydney" },
+        { "code": "NZ", "name": "New Zealand", "tz": "Pacific/Auckland" }
+      ]
+    },
+    {
+      "id": "pacific",
+      "name": "Pacific Islands",
+      "countries": [
+        { "code": "FJ", "name": "Fiji", "tz": "Pacific/Fiji" },
+        { "code": "PG", "name": "Papua New Guinea", "tz": "Pacific/Port_Moresby" },
+        { "code": "WS", "name": "Samoa", "tz": "Pacific/Apia" },
+        { "code": "TO", "name": "Tonga", "tz": "Pacific/Tongatapu" },
+        { "code": "VU", "name": "Vanuatu", "tz": "Pacific/Efate" },
+        { "code": "SB", "name": "Solomon Islands", "tz": "Pacific/Guadalcanal" },
+        { "code": "NC", "name": "New Caledonia", "tz": "Pacific/Noumea" },
+        { "code": "PF", "name": "French Polynesia", "tz": "Pacific/Tahiti" },
+        { "code": "CK", "name": "Cook Islands", "tz": "Pacific/Rarotonga" },
+        { "code": "GU", "name": "Guam", "tz": "Pacific/Guam" }
+      ]
+    },
+    {
+      "id": "sea",
+      "name": "Southeast Asia",
+      "countries": [
+        { "code": "ID", "name": "Indonesia", "tz": "Asia/Jakarta" },
+        { "code": "MY", "name": "Malaysia", "tz": "Asia/Kuala_Lumpur" },
+        { "code": "SG", "name": "Singapore", "tz": "Asia/Singapore" },
+        { "code": "TH", "name": "Thailand", "tz": "Asia/Bangkok" },
+        { "code": "PH", "name": "Philippines", "tz": "Asia/Manila" },
+        { "code": "VN", "name": "Vietnam", "tz": "Asia/Ho_Chi_Minh" },
+        { "code": "BN", "name": "Brunei", "tz": "Asia/Brunei" },
+        { "code": "KH", "name": "Cambodia", "tz": "Asia/Phnom_Penh" },
+        { "code": "LA", "name": "Laos", "tz": "Asia/Vientiane" },
+        { "code": "MM", "name": "Myanmar", "tz": "Asia/Yangon" },
+        { "code": "TL", "name": "Timor-Leste", "tz": "Asia/Dili" }
+      ]
+    },
+    {
+      "id": "east",
+      "name": "East Asia",
+      "countries": [
+        { "code": "JP", "name": "Japan", "tz": "Asia/Tokyo" },
+        { "code": "KR", "name": "South Korea", "tz": "Asia/Seoul" },
+        { "code": "CN", "name": "China", "tz": "Asia/Shanghai" },
+        { "code": "HK", "name": "Hong Kong", "tz": "Asia/Hong_Kong" },
+        { "code": "TW", "name": "Taiwan", "tz": "Asia/Taipei" },
+        { "code": "MO", "name": "Macau", "tz": "Asia/Macau" },
+        { "code": "MN", "name": "Mongolia", "tz": "Asia/Ulaanbaatar" }
+      ]
+    },
+    {
+      "id": "south",
+      "name": "South Asia",
+      "countries": [
+        { "code": "IN", "name": "India", "tz": "Asia/Kolkata" },
+        { "code": "PK", "name": "Pakistan", "tz": "Asia/Karachi" },
+        { "code": "BD", "name": "Bangladesh", "tz": "Asia/Dhaka" },
+        { "code": "LK", "name": "Sri Lanka", "tz": "Asia/Colombo" },
+        { "code": "NP", "name": "Nepal", "tz": "Asia/Kathmandu" },
+        { "code": "BT", "name": "Bhutan", "tz": "Asia/Thimphu" },
+        { "code": "MV", "name": "Maldives", "tz": "Indian/Maldives" }
+      ]
+    }
+  ]
+}
