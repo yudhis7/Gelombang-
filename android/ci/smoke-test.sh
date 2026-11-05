@@ -100,6 +100,9 @@ media
 echo "== crashes"
 adb logcat -d -b crash | tail -60
 adb logcat -d | grep -E "FATAL|AndroidRuntime|ANR in" | head -40
+echo "== app warnings"
+APP_PID=$(adb shell pidof $PKG | tr -d '\r')
+[ -n "$APP_PID" ] && adb logcat -d --pid="$APP_PID" | grep -E " [WE] " | grep -v "TextView\|hiddenapi" | head -60
 echo "== app log"
 adb logcat -d | grep -iE "gelombang|ExoPlayer|MediaSession|media3" | grep -iE "error|exception|fail" | head -40
 echo "== done"

@@ -104,6 +104,11 @@ jobs:
         with:
           name: gelombang-android-apk
           path: apk
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -118,4 +123,10 @@ jobs:
           profile: pixel_6
           emulator-options: -no-window -gpu swiftshader_indirect -no-boot-anim -camera-back none -noaudio
           disable-animations: true
-          script: bash android/ci/smoke-test.sh "$(ls apk/*.apk)"
+          script: |
+            bash android/ci/smoke-test.sh "$(ls apk/*.apk)"
+            adb uninstall com.yudhis7.gelombang || true
+            adb logcat -c
+            cd android && ./gradlew --no-daemon connectedDebugAndroidTest || echo "INSTRUMENTED TESTS FAILED"
+            adb logcat -d -s AutoBrowseTest:V TestRunner:V || true
+            adb logcat -d | grep -iE "media3|MediaSession|MediaBrowser|LegacyStub|gelombang" | grep -E " [WE] " | head -60 || true
