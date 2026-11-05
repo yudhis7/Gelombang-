@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src * data: blob:; media-src * data: blob:; connect-src *; worker-src blob:; font-src 'self' data:">
+  <title>Gelombang Radio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <img class="brand-mark" src="logo.png" alt="" draggable="false">
+        <span class="brand-name">Gelombang</span>
+      </div>
+      <div class="search" id="search-wrap">
+        <span class="search-icon" id="search-icon"></span>
+        <input id="search" type="search" placeholder="Search stations or genres across Asia-Pacific" autocomplete="off" spellcheck="false">
+        <button class="scope" id="search-scope" hidden></button>
+        <kbd id="search-kbd">Ctrl F</kbd>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="btn-add" title="Add a station by stream URL"></button>
+        <button class="icon-btn" id="btn-settings" title="Settings"></button>
+      </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="content" id="content" tabindex="-1"></main>
+    <footer class="player" id="player"></footer>
+  </div>
+
+  <div id="popover-root"></div>
+  <div id="modal-root"></div>
+  <div id="toasts" aria-live="polite"></div>
+
+  <script src="vendor/hls.min.js"></script>
+  <script src="icons.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

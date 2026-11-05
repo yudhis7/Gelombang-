@@ -1,0 +1,87 @@
+{
+  "name": "gelombang-radio",
+  "productName": "Gelombang Radio",
+  "version": "1.0.0",
+  "description": "Personal desktop player for online radio across Asia-Pacific, Australia and New Zealand",
+  "main": "src/main/main.js",
+  "author": "yudhis7",
+  "contributors": [
+    {
+      "name": "yudhis7",
+      "url": "https://github.com/yudhis7"
+    }
+  ],
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/yudhis7/Gelombang-#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yudhis7/Gelombang-.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yudhis7/Gelombang-/issues"
+  },
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "postinstall": "node scripts/copy-vendor.js",
+    "dist:win": "electron-builder --win nsis zip --x64 --publish never",
+    "dist:mac": "electron-builder --mac zip --arm64 --x64 --publish never",
+    "dist": "electron-builder --publish never"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "electron-builder": "26.18.0",
+    "hls.js": "1.7.4"
+  },
+  "build": {
+    "appId": "com.yudhis7.gelombangradio",
+    "productName": "Gelombang Radio",
+    "copyright": "Personal use",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "afterPack": "scripts/after-pack.js",
+    "artifactName": "Gelombang-Radio-${version}-${os}-${arch}.${ext}",
+    "mac": {
+      "category": "public.app-category.music",
+      "icon": "build/icon.icns",
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "target": [
+        "zip"
+      ],
+      "minimumSystemVersion": "12.0"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Gelombang Radio",
+      "artifactName": "Gelombang-Radio-Setup-${version}.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "build/icon.png",
+      "category": "AudioVideo"
+    },
+    "publish": null
+  }
+}
