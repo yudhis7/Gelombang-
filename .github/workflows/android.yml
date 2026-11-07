@@ -85,6 +85,9 @@ jobs:
           echo "== size"; ls -la "$APK"
           echo "== badging"; "$BT/aapt2" dump badging "$APK" | grep -E "^(package|sdkVersion|targetSdkVersion|application-label|launchable|uses-permission|native-code|supports-screens)" || true
           echo "== Android Auto metadata"; "$BT/aapt2" dump xmltree --file AndroidManifest.xml "$APK" | grep -A2 -E "car.application|MediaBrowserService|MediaLibraryService|foregroundServiceType" || true
+          echo "== automotive_app_desc contents"
+          RES=$("$BT/aapt2" dump resources "$APK" | grep -A3 "xml/automotive_app_desc" | grep -oE "\(file\) [^ ]+" | head -1 | cut -d' ' -f2)
+          echo "file: $RES"; [ -n "$RES" ] && "$BT/aapt2" dump xmltree --file "$RES" "$APK"
           echo "== signature"; "$BT/apksigner" verify --verbose --print-certs "$APK" | grep -E "Verified using|Signer #1 certificate (DN|SHA-256)|Number of signers" || true
 
       - uses: actions/upload-artifact@v4
